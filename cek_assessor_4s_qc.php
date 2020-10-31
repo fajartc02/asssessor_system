@@ -1,0 +1,668 @@
+<?php error_reporting(0); ?>
+<?php ob_start(); ?>
+<?php session_start(); ?>
+
+<?php require_once dirname (__FILE__) . "/config/connection.php"; ?>
+
+<?php
+$title = "Form assesor";
+
+$active_dashboard = "";
+$active_4s = "active";
+$active_stw = "";
+$active_pm = "";
+$active_om = "";
+
+$fid = $_GET['fid'];
+
+$queryku = mysqli_query($con, "select farray_value from t_schedule_4s where fid = '$fid'");
+while($queryku2=mysqli_fetch_array($queryku))
+{
+	$farray_valuenye = $queryku2['farray_value'];
+}
+
+
+
+include 'cek_jml_4s.php';
+
+
+
+$vale = explode(";",$farray_valuenye);
+
+
+	$ss = mysqli_query($con, "select count(fid) as jml from t_form_4s_qc order by fid asc");
+   while($ss2=mysqli_fetch_array($ss))
+   {
+	$jml_4s = $ss2['jml']; 
+   }
+    
+	
+	$sum_score = 0;
+
+	for($i=0;$i<=$jml_4s;$i++){
+		
+	
+		$sum_score += $vale[$i];
+		
+		
+		//$sum_score += ${"val".$i."_"};
+	}
+
+
+
+$score = $sum_score;
+
+/*
+$score = $vale[0] + $vale[1] + $vale[2] + $vale[3] + $vale[4] + $vale[5] + $vale[6] + $vale[7] + $vale[8] + $vale[9] + $vale[10] + $vale[11] + $vale[12] + $vale[13] + $vale[14] + $vale[15] + $vale[16] + $vale[17] + $vale[18] + $vale[19] + $vale[20] + $vale[21] + $vale[22] + $vale[23] + $vale[24] + $vale[25] + $vale[26] + $vale[27] + $vale[28] + $vale[29] + $vale[30] + $vale[31] + $vale[32] + $vale[33] + $vale[34] + $vale[35] + $vale[36] + $vale[37] + $vale[38] + $vale[39] + $vale[40];
+*/
+
+
+ $scorex = mysqli_query($con, "select fhasil from t_form_4s_qc order by fid asc limit 1");
+   while($scorex2=mysqli_fetch_array($scorex))
+   {
+	$ts = $scorex2['fhasil']; 
+   }
+   
+   $ns = $jml_4s * $ts;
+	
+
+
+if($score > $ns){
+	$score = $ns;
+}
+
+$score = round(($score / $ns) * 100);
+
+$text_score = "";
+if($score != ""){
+$text_score = "Score : ".$score;
+}			
+
+?>
+
+
+
+
+<?php include('includes/header.php'); ?>
+
+<!-- Begin Page Content -->
+<div style="padding:5px">
+
+<center><legend style="margin:-10px">Form 4S</legend></center>
+
+<style>
+ 
+
+table {
+  margin: 1em 0;
+  border-collapse: collapse;
+  border: 0.1em solid #d6d6d6;
+}
+
+caption {
+  text-align: left;
+  font-style: italic;
+  padding: 0.25em 0.5em 0.5em 0.5em;
+}
+
+th,
+td {
+  padding: 0.25em 0.5em 0.25em 1em;
+  vertical-align: text-top;
+  text-align: left;
+}
+
+th {
+  vertical-align: bottom;
+  background-color:#4287f5;
+  color: #fff;
+}
+
+
+
+
+/* Fixed Headers */
+
+th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+th[scope=row] {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+
+.btn-info{
+  width: 80px !important;
+  font-size: 10px;
+}
+
+
+  </style>
+
+<div style="height:450px;overflow-y:scroll;" role="region" aria-labelledby="HeadersCol" tabindex="0" >
+<form action="cek_assessor_4s_qc.php" method="post" >
+<input type="hidden" name="fidx" value="<?php echo $fid; ?>" />
+<table  class="table table-bordered" style="font-size:12px"  >
+<thead>
+<tr align="center">
+<th>No</th>
+<th colspan="2" width="20"><center>Tempat yang di cek</center></th>
+<th width="20"><center>Item Evaluasi</center></th>
+<th width="10"><center>No</center></th>
+<th width=""><center>Konten Evaluasi</center></th>
+<th width="10"><center>Hasil Evaluasi</center></th>
+<th><center>Temuan</center></th>
+</tr>
+</thead>
+<tbody>
+ 
+<?php  
+$no = 0;
+$no_jml = 1;
+
+$test = mysqli_query($con, "select * from t_form_4s_qc order by fid asc");
+  while($test2=mysqli_fetch_array($test))
+  {
+
+  $id = $test2['fid']; 
+  $fjudul1 = $test2['fjudul1']; 
+  $fjudul2 = $test2['fjudul2']; 
+  $fitem = $test2['fitem']; 
+  $fno = $test2['fno']; 
+  $fkonten = $test2['fkonten']; 
+  $fhasil = $test2['fhasil']; 
+
+  
+ 
+  
+  
+  ?>
+
+<tr>
+<td><span><?php echo $no_jml; ?></span></td>
+<td><?php echo $fjudul1; ?></td>
+<td><?php echo $fjudul2; ?></td>
+<td><?php echo $fitem; ?></td>
+<td><?php echo $fno; ?></td>
+<td><?php echo $fkonten; ?></td>
+<td>
+	
+   <select name="val<?php echo $no_jml; ?>" id="val<?php echo $no_jml; ?>" value="<?php echo $vale[$no]; ?>" style="width: 45px;">
+	
+	<?php for($i=0; $i <= $fhasil; $i++){ ?>
+     <option value="<?php echo $i; ?>" <?php echo ($vale[$no] ==  $i) ? ' selected="selected"' : '';?>><?php echo $i; ?></option>
+   
+	 
+  <?php } ?>
+  </select>  
+</td>
+
+<td> <a href="#myModal" onclick="getId(document.getElementById('fid_score').value='<?php echo $no_jml; ?>','<?php echo $fid; ?>');" data-toggle="modal" data-target="#myModal" class="btn btn-info" >Isi Temuan</a>
+<p class="text-center"><br/>
+Total : <?php echo ${"jml".$no_jml};?> Temuan 
+</p>
+</td>
+</tr>
+
+
+  <?php 
+  $no_jml++; 
+$no++;  
+  }
+
+  ?>
+  
+
+
+</tbody>
+</table>
+<br>
+
+<h2 class="text-center" style="color:blue"><?php echo $text_score; ?></h2>
+
+<br>
+<br>
+<input type="submit" name="submit" value="SUBMIT" style="width:100%" class="btn btn-success" />
+</form>
+<br>
+<!-- 
+<center><h5>Ada temuan ? <a href="isi_temuan_4s.php"  data-toggle="modal" data-target="#myModal" class="btn btn-info">Isi Temuan</a></h5></center>
+<br>-->
+</div>
+  
+
+
+</div>
+<!-- /.container-fluid -->
+
+ 
+<?php
+
+if (isset($_POST['submit']))
+{
+	
+	$fidx = $_POST["fidx"];
+	
+	$sub = mysqli_query($con, "select count(fid) as jml from t_form_4s_qc order by fid asc");
+   while($sub2=mysqli_fetch_array($sub))
+   {
+	$jml_form_4s = $sub2['jml']; 
+   }
+    
+	$sum_score = 0;
+    $sum_array_value = "";
+	for($i=1;$i<=$jml_form_4s;$i++){
+		${"val".$i} = $_POST["val$i"];
+		$sum_array_value .= ${"val".$i}.";";
+		$sum_score += ${"val".$i};
+	}
+
+	$farray_value = $sum_array_value;	
+	
+   $fscore = $sum_score;
+   
+   $scorex = mysqli_query($con, "select fhasil from t_form_4s_qc order by fid asc limit 1");
+   while($scorex2=mysqli_fetch_array($scorex))
+   {
+	$total_score = $scorex2['fhasil']; 
+   }
+	
+	$nilai = $jml_form_4s * $total_score;
+
+    $score = round(($fscore / $nilai) * 100);
+	
+
+	mysqli_query($con, "update t_schedule_4s set farray_value = '$farray_value', fscore = '$score' where fid = '$fidx'");
+	
+	echo "<script>window.location='cek_assessor_4s_qc.php?fid=$fidx'</script>";
+	
+	//echo "update t_schedule_4s set farray_value = '$farray_value' where fid = '$fidx'";
+			
+}
+	
+	
+	
+//save temuan
+if (isset($_POST['submit_temuan']))
+{
+	$fid_schedule = $_POST["fid_schedule"];
+  $fid_score = $_POST["fid_score"];
+	$fnote = $_POST["fnote"];
+
+   $foto = $_FILES['fphoto']['name'];
+   $tmp = $_FILES['fphoto']['tmp_name'];
+    
+    if(isset($foto) and !empty($foto)){
+    $path = "images/temuan4s/";
+    // Proses upload
+    if(move_uploaded_file($tmp, $path.$foto)){ // Cek apakah gambar berhasil diupload atau tidak
+  // Proses simpan ke Database
+
+	
+	mysqli_query($con, "insert into t_finding_4s (fid_schedule, fphoto, fnote, fid_score, fgroup) values ('$fid_schedule', '$foto', '$fnote', '$fid_score', '$fid_schedule')");
+
+}
+
+}
+  //Simpan nilai
+
+	/*
+	
+  $val1_ = $_POST["val1_"];
+  $val2_ = $_POST["val2_"];
+  $val3_ = $_POST["val3_"];
+  $val4_ = $_POST["val4_"];
+  $val5_ = $_POST["val5_"];
+  $val6_ = $_POST["val6_"];
+  $val7_ = $_POST["val7_"];
+  $val8_ = $_POST["val8_"];
+  $val9_ = $_POST["val9_"];
+  $val10_ = $_POST["val10_"];
+  $val11_ = $_POST["val11_"];
+  $val12_ = $_POST["val12_"];
+  $val13_ = $_POST["val13_"];
+  $val14_ = $_POST["val14_"];
+  $val15_ = $_POST["val15_"];
+  $val16_ = $_POST["val16_"];
+  $val17_ = $_POST["val17_"];
+  $val18_ = $_POST["val18_"];
+  $val19_ = $_POST["val19_"];
+  $val20_ = $_POST["val20_"];
+  $val21_ = $_POST["val21_"];
+  $val22_ = $_POST["val22_"];
+  $val23_ = $_POST["val23_"];
+  $val24_ = $_POST["val24_"];
+  $val25_ = $_POST["val25_"];
+  $val26_ = $_POST["val26_"];
+  $val27_ = $_POST["val27_"];
+  $val28_ = $_POST["val28_"];
+  $val29_ = $_POST["val29_"];
+  $val30_ = $_POST["val30_"];
+  $val31_ = $_POST["val31_"];
+  $val32_ = $_POST["val32_"];
+  $val33_ = $_POST["val33_"];
+  $val34_ = $_POST["val34_"];
+  $val35_ = $_POST["val35_"];
+  $val36_ = $_POST["val36_"];
+  $val37_ = $_POST["val37_"];
+  $val38_ = $_POST["val38_"];
+  $val39_ = $_POST["val39_"];
+  $val40_ = $_POST["val40_"];
+  $val41_ = $_POST["val41_"];
+  
+  */
+  
+  $fidx_ = $_POST["fid_schedule"];
+  
+  	
+	$sub = mysqli_query($con, "select count(fid) as jml from t_form_4s_qc order by fid asc");
+   while($sub2=mysqli_fetch_array($sub))
+   {
+	$jml_form_4s = $sub2['jml']; 
+   }
+    
+	$sum_score = 0;
+    $sum_array_value = "";
+	for($i=1;$i<=$jml_form_4s;$i++){
+		${"val".$i."_"} = $_POST["val".$i."_"];
+		$sum_array_value .= ${"val".$i."_"}.";";
+		$sum_score += ${"val".$i."_"};
+	}
+
+	$farray_value_ = $sum_array_value;	
+	
+   $fscore_ = $sum_score;
+   
+   $scorex = mysqli_query($con, "select fhasil from t_form_4s_qc order by fid asc limit 1");
+   while($scorex2=mysqli_fetch_array($scorex))
+   {
+	$total_score = $scorex2['fhasil']; 
+   }
+	
+	$nilai = $jml_form_4s * $total_score;
+
+    $score_ = round(($fscore_ / $nilai) * 100);
+	
+  mysqli_query($con, "update t_schedule_4s set farray_value = '$farray_value_', fscore = '$score_' where fid = '$fidx_'");
+
+
+   
+  //
+	
+	 echo "<script>window.location='cek_assessor_4s_qc.php?fid=$fid_schedule'</script>";
+	
+}
+
+?>
+
+ 
+ 
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" >
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Isi Temua 4S</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <form action="cek_assessor_4s_qc.php" method="post" enctype="multipart/form-data">
+	  
+	  <!-- data score -->
+	  
+	<?php $sub = mysqli_query($con, "select count(fid) as jml from t_form_4s_qc order by fid asc");
+
+   while($sub2=mysqli_fetch_array($sub))
+   {
+	$jml_form_4s = $sub2['jml']; 
+   }
+    
+
+	for($i=1;$i<=$jml_form_4s;$i++){
+		?>
+
+	<input type="hidden" name="val<?php echo $i; ?>_" id="val<?php echo $i; ?>_" />	
+    
+	<?php  } ?>
+	  
+	  
+      <!-- Modal body -->
+      <input type="hidden" name="fid_score" id="fid_score" >
+      <div class="modal-body">
+
+		 <script src="assets/tinymce/tinymce.min.js"></script>
+      <script>
+        tinymce.init({
+      selector: '#myTextarea',
+      encoding: 'xml', 
+      plugins: 'image code',
+      height : "350",
+      menubar: 'file edit view format tools table tc help',
+      toolbar: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify ',
+      
+      
+      // without images_upload_url set, Upload tab won't show up
+      images_upload_url: 'upload_tinymce.php',
+      
+      // override default upload handler to simulate successful upload
+      images_upload_handler: function (blobInfo, success, failure) {
+        var xhr, formData;
+        
+        xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.open('POST', 'upload_tinymce.php');
+        
+        xhr.onload = function() {
+          var json;
+        
+          if (xhr.status != 200) {
+            failure('HTTP Error: ' + xhr.status);
+            return;
+          }
+        
+          json = JSON.parse(xhr.responseText);
+        
+          if (!json || typeof json.location != 'string') {
+            failure('Invalid JSON: ' + xhr.responseText);
+            return;
+          }
+        
+          success(json.location);
+        };
+        
+        formData = new FormData();
+        formData.append('file', blobInfo.blob(), blobInfo.filename());
+        
+        xhr.send(formData);
+      },
+    });
+    </script>
+		
+		<input type="hidden" name="fid_schedule" value="<?php echo $fid; ?>" >
+		
+		 <input type="file" name="fphoto" id="fphoto" required="required"><br/><br/>
+    <img src="" id="imgView" style="width: 30%;"class="card-img-top img-fluid">
+    <hr/>
+    <label>Note :</label>
+    <textarea id="myTextarea" name="fnote" ></textarea>
+		
+	  
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+      <input type="submit" name="submit_temuan" value="Save" class="btn btn-success" /> <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      </form>
+      <hr/>
+      <div id="tableku"></div>
+    </div>
+
+  </div>
+</div> 
+ 
+<?php include('includes/footer.php'); ?>    
+
+
+
+    <script>
+
+    function getId(idschedule,idscore){
+      
+    var dataString = "idschedule="+idschedule+"&idscore="+idscore; 
+    //alert(dataString);
+
+    $.ajax({
+    type: 'POST',
+    data: dataString,
+    url: 'cek_4s.php',       
+    success: function(htmlx) {
+      var myStr = htmlx;
+      document.getElementById('tableku').innerHTML = htmlx;
+    }
+    });
+	
+	
+			<?php $subx = mysqli_query($con, "select count(fid) as jml from t_form_4s_qc order by fid asc");
+   while($subx2=mysqli_fetch_array($subx))
+   {
+	$jml_form_4x = $subx2['jml']; 
+   }
+    
+
+	for($i=1;$i<=$jml_form_4x;$i++){
+		?>
+
+	 document.getElementById('val<?php echo $i; ?>_').value = document.getElementById('val<?php echo $i; ?>').value;
+    
+	<?php  }	?>
+	
+	
+	
+	    //get score
+		
+		/*
+    document.getElementById('val1_').value = document.getElementById('val1').value;
+    document.getElementById('val2_').value = document.getElementById('val2').value;
+    document.getElementById('val3_').value = document.getElementById('val3').value;
+    document.getElementById('val4_').value = document.getElementById('val4').value;
+    document.getElementById('val5_').value = document.getElementById('val5').value;
+    document.getElementById('val6_').value = document.getElementById('val6').value;  
+    document.getElementById('val7_').value = document.getElementById('val7').value;
+    document.getElementById('val8_').value = document.getElementById('val8').value;
+    document.getElementById('val9_').value = document.getElementById('val9').value;
+    document.getElementById('val10_').value = document.getElementById('val10').value;
+    document.getElementById('val11_').value = document.getElementById('val11').value;  
+    document.getElementById('val12_').value = document.getElementById('val12').value;
+    document.getElementById('val13_').value = document.getElementById('val13').value;
+    document.getElementById('val14_').value = document.getElementById('val14').value;
+    document.getElementById('val15_').value = document.getElementById('val15').value;
+    document.getElementById('val16_').value = document.getElementById('val16').value;  
+    document.getElementById('val17_').value = document.getElementById('val17').value;
+    document.getElementById('val18_').value = document.getElementById('val18').value;
+    document.getElementById('val19_').value = document.getElementById('val19').value;
+    document.getElementById('val20_').value = document.getElementById('val20').value;
+    document.getElementById('val21_').value = document.getElementById('val21').value;  
+    document.getElementById('val22_').value = document.getElementById('val22').value;
+    document.getElementById('val23_').value = document.getElementById('val23').value;
+    document.getElementById('val24_').value = document.getElementById('val24').value;
+    document.getElementById('val25_').value = document.getElementById('val25').value;
+    document.getElementById('val26_').value = document.getElementById('val26').value;  
+    document.getElementById('val27_').value = document.getElementById('val27').value;
+    document.getElementById('val28_').value = document.getElementById('val28').value;
+    document.getElementById('val29_').value = document.getElementById('val29').value;
+    document.getElementById('val30_').value = document.getElementById('val30').value;
+    document.getElementById('val31_').value = document.getElementById('val31').value;  
+    document.getElementById('val32_').value = document.getElementById('val32').value;
+    document.getElementById('val33_').value = document.getElementById('val33').value;
+    document.getElementById('val34_').value = document.getElementById('val34').value;
+    document.getElementById('val35_').value = document.getElementById('val35').value;
+    document.getElementById('val36_').value = document.getElementById('val36').value;  
+    document.getElementById('val37_').value = document.getElementById('val37').value;
+    document.getElementById('val38_').value = document.getElementById('val38').value;
+    document.getElementById('val39_').value = document.getElementById('val39').value;
+    document.getElementById('val40_').value = document.getElementById('val40').value;
+    document.getElementById('val41_').value = document.getElementById('val41').value;  
+    document.getElementById('val42_').value = document.getElementById('val42').value;
+    document.getElementById('val43_').value = document.getElementById('val43').value;
+    document.getElementById('val44_').value = document.getElementById('val44').value;
+    document.getElementById('val45_').value = document.getElementById('val45').value;
+    document.getElementById('val46_').value = document.getElementById('val46').value;  
+    document.getElementById('val47_').value = document.getElementById('val47').value;
+    document.getElementById('val48_').value = document.getElementById('val48').value;
+    document.getElementById('val49_').value = document.getElementById('val49').value;
+	document.getElementById('val50_').value = document.getElementById('val50').value;
+	document.getElementById('val51_').value = document.getElementById('val51').value;  
+    document.getElementById('val52_').value = document.getElementById('val52').value;
+    document.getElementById('val53_').value = document.getElementById('val55').value;
+    document.getElementById('val54_').value = document.getElementById('val54').value;
+    document.getElementById('val55_').value = document.getElementById('val55').value;
+    document.getElementById('val56_').value = document.getElementById('val56').value;  
+    document.getElementById('val57_').value = document.getElementById('val57').value;
+    document.getElementById('val58_').value = document.getElementById('val58').value;
+    document.getElementById('val59_').value = document.getElementById('val59').value;
+	document.getElementById('val60_').value = document.getElementById('val60').value;
+	document.getElementById('val61_').value = document.getElementById('val61').value;  
+    document.getElementById('val62_').value = document.getElementById('val62').value;
+    document.getElementById('val63_').value = document.getElementById('val66').value;
+    document.getElementById('val64_').value = document.getElementById('val64').value;
+    document.getElementById('val65_').value = document.getElementById('val65').value;
+    document.getElementById('val66_').value = document.getElementById('val66').value;  
+    document.getElementById('val67_').value = document.getElementById('val67').value;
+    document.getElementById('val68_').value = document.getElementById('val68').value;
+    document.getElementById('val69_').value = document.getElementById('val69').value;
+	document.getElementById('val70_').value = document.getElementById('val70').value;
+	document.getElementById('val71_').value = document.getElementById('val71').value;  
+    document.getElementById('val72_').value = document.getElementById('val72').value;
+    document.getElementById('val73_').value = document.getElementById('val77').value;
+    document.getElementById('val74_').value = document.getElementById('val74').value;
+    document.getElementById('val75_').value = document.getElementById('val75').value;
+    document.getElementById('val76_').value = document.getElementById('val76').value;  
+
+	*/
+
+  }
+  
+  </script>
+
+  <script>
+    $("#fphoto").change(function(event) {  
+      fadeInAdd();
+      getURL(this);    
+    });
+
+    $("#fphoto").on('click',function(event){
+      fadeInAdd();
+    });
+
+    function getURL(input) {    
+      if (input.files && input.files[0]) {   
+        var reader = new FileReader();
+        var filename = $("#fphoto").val();
+        filename = filename.substring(filename.lastIndexOf('\\')+1);
+        reader.onload = function(e) {
+          debugger;      
+          $('#imgView').attr('src', e.target.result);
+          $('#imgView').hide();
+          $('#imgView').fadeIn(500);      
+          $('.custom-file-label').text(filename);             
+        }
+        reader.readAsDataURL(input.files[0]);    
+      }
+      $(".alert").removeClass("loadAnimate").hide();
+    }
+
+    function fadeInAdd(){
+      fadeInAlert();  
+    }
+    function fadeInAlert(text){
+      $(".alert").text(text).addClass("loadAnimate");  
+    }
+</script>
