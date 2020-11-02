@@ -374,7 +374,7 @@ include('assets/phpmailer/SMTP.php');
 
 //
 $noflag = 1;
-$querykustw = mysqli_query($con, "select t_schedule_4s.fid, '4S' as fhave, t_schedule_4s.fline, t_schedule_4s.fworsite t_schedule_4s.flag_email, t_schedule_4s.fnoreg, t_users.femail, t_users.fname from t_schedule_4s join t_users on t_schedule_4s.fnoreg = t_users.fnoreg  where t_schedule_4s.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_om.fid, 'OM' as fhave, t_schedule_om.fline, t_schedule_om.fworsite t_schedule_om.flag_email, t_schedule_om.fnoreg, t_users.femail, t_users.fname from t_schedule_om join t_users on t_schedule_om.fnoreg = t_users.fnoreg  where t_schedule_om.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_stw.fid, 'STW' as fhave, t_schedule_stw.fline, t_schedule_stw.fworsite t_schedule_stw.flag_email, t_schedule_stw.fnoreg, t_users.femail, t_users.fname from t_schedule_stw join t_users on t_schedule_stw.fnoreg = t_users.fnoreg  where t_schedule_stw.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_pm.fid, 'PM' as fhave, t_schedule_pm.fline, t_schedule_pm.fworsite t_schedule_pm.flag_email, t_schedule_pm.fnoreg, t_users.femail, t_users.fname from t_schedule_pm join t_users on t_schedule_pm.fnoreg = t_users.fnoreg  where t_schedule_pm.fdate = SUBSTR(NOW(), 1, 10)");
+$querykustw = mysqli_query($con, "select t_schedule_4s.fid, '4S' as fhave, t_schedule_4s.fline, t_schedule_4s.fworsite, t_schedule_4s.flag_email, t_schedule_4s.fnoreg, t_users.femail, t_users.fname from t_schedule_4s join t_users on t_schedule_4s.fnoreg = t_users.fnoreg  where t_schedule_4s.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_om.fid, 'OM' as fhave, t_schedule_om.fline, t_schedule_om.fworsite, t_schedule_om.flag_email, t_schedule_om.fnoreg, t_users.femail, t_users.fname from t_schedule_om join t_users on t_schedule_om.fnoreg = t_users.fnoreg  where t_schedule_om.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_stw.fid, 'STW' as fhave, t_schedule_stw.fline, t_schedule_stw.fworsite, t_schedule_stw.flag_email, t_schedule_stw.fnoreg, t_users.femail, t_users.fname from t_schedule_stw join t_users on t_schedule_stw.fnoreg = t_users.fnoreg  where t_schedule_stw.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_pm.fid, 'PM' as fhave, t_schedule_pm.fline, t_schedule_pm.fworsite, t_schedule_pm.flag_email, t_schedule_pm.fnoreg, t_users.femail, t_users.fname from t_schedule_pm join t_users on t_schedule_pm.fnoreg = t_users.fnoreg  where t_schedule_pm.fdate = SUBSTR(NOW(), 1, 10)");
 while ($querykustw2 = mysqli_fetch_array($querykustw)) {
   $fid = $querykustw2['fid'];
   $fname = $querykustw2['fname'];
@@ -427,9 +427,9 @@ while ($querykustw2 = mysqli_fetch_array($querykustw)) {
     if (empty($cv)) { // Jika tanpa attachment
       $send = $mail->send();
       if ($send) { // Jika Email berhasil dikirim
-        echo "<h1>Email berhasil dikirim tanpa lampiran</h1><br /><a href='index.php'>Kembali ke Form</a>";
+        echo "<script>window.location='home.php'</script>";
       } else { // Jika Email gagal dikirim
-        echo "<h1>Email gagal dikirim tanpa lampiran</h1><br /><a href='index.php'>Kembali ke Form</a>";
+        echo "<script>window.location='home.php'</script>";
         // echo '<h1>ERROR<br /><small>Error while sending email: '.$mail->getError().'</small></h1>'; // Aktifkan untuk mengetahui error message
       }
     }
