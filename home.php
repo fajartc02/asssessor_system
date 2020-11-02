@@ -112,7 +112,7 @@ while ($querykustw2 = mysqli_fetch_array($querykustw)) {
 	
 	Pemberitahuan hari ini adalah jadwal Audit 3 Pillar System.
 	
-	LINE           : " . $fline . $fworsite . "
+	LINE           : " . $fline . ' ' . $fworsite . "
 	PILLAR         : " . $fhave . "
 	
 	Mohon untuk klik link dibawah ini:
