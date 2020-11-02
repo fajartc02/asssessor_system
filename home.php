@@ -31,6 +31,287 @@ $active_om = "";
 
 $regnox = $_SESSION['fnoreg'];
 ?>
+
+<?php
+//Pattern Schedule 4S
+
+//cek ada schedule bulan ini
+$thmo = date("Y-m");
+$adakah = 0;
+$queryku = mysqli_query($con, "select count(fid) as adakah from t_schedule_4s where substr(fdate, 1, 7) = '$thmo'");
+while ($queryku2 = mysqli_fetch_array($queryku)) {
+	$adakah = $queryku2['adakah'];
+}
+
+//generate schedule
+$senin = "";
+$nh = 0;
+if ($adakah <= 7) {
+	for ($i = 1; $i <= 31; $i++) {
+
+		if ($i <= 9) {
+			$i = "0" . $i;
+		}
+		$tglnow = date("Y-m-") . $i;
+		$queryku = mysqli_query($con, "SELECT DAYOFWEEK('$tglnow') as harike");
+		while ($queryku2 = mysqli_fetch_array($queryku)) {
+			$harike = $queryku2['harike'];
+		}
+
+		if ($harike == 2) {
+			if ($nh == 0) {
+				$senin = $tglnow;
+			}
+			$nh++;
+		}
+	}
+
+
+	//create ke table
+	$queryku = mysqli_query($con, "select * from t_pattern_schedule where ftype_pillar = '4S'");
+	while ($queryku2 = mysqli_fetch_array($queryku)) {
+		$fjobas = $queryku2['fjobas'];
+		$fnoreg = $queryku2['fnoreg'];
+		$fname = $queryku2['fname'];
+		$fdate = $senin;
+		$fline = $queryku2['fline'];
+		$fworsite = $queryku2['fworsite'];
+
+		if ($fjobas == "Assessor") {
+			mysqli_query($con, "insert into t_schedule_4s (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Plan and Do', '', '$fnoreg', '$fname', '$fdate', '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Section Head") {
+			mysqli_query($con, "insert into t_schedule_4s (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 1 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager") {
+			mysqli_query($con, "insert into t_schedule_4s (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 2 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager Cross") {
+			mysqli_query($con, "insert into t_schedule_4s (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 3 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Division") {
+			mysqli_query($con, "insert into t_schedule_4s (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check Board and Report', '', '$fnoreg', '$fname', date_add('$fdate', interval 4 day), '$fline', '$fworsite', '$fjobas')");
+		}
+	}
+}
+
+
+
+
+
+?>
+
+
+
+<?php
+//Patern Schedule OM
+
+//cek ada schedule bulan ini
+$thmo = date("Y-m");
+$adakah = 0;
+$queryku = mysqli_query($con, "select count(fid) as adakah from t_schedule_om where substr(fdate, 1, 7) = '$thmo'");
+while ($queryku2 = mysqli_fetch_array($queryku)) {
+	$adakah = $queryku2['adakah'];
+}
+
+//generate schedule
+$senin = "";
+$nh = 0;
+if ($adakah <= 7) {
+	for ($i = 1; $i <= 31; $i++) {
+
+		if ($i <= 9) {
+			$i = "0" . $i;
+		}
+		$tglnow = date("Y-m-") . $i;
+		$queryku = mysqli_query($con, "SELECT DAYOFWEEK('$tglnow') as harike");
+		while ($queryku2 = mysqli_fetch_array($queryku)) {
+			$harike = $queryku2['harike'];
+		}
+
+		if ($harike == 2) {
+			if ($nh == 2) {
+				$senin = $tglnow;
+			}
+			$nh++;
+		}
+	}
+
+
+
+
+	//create ke table
+	$queryku = mysqli_query($con, "select * from t_pattern_schedule where ftype_pillar = 'OM'");
+	while ($queryku2 = mysqli_fetch_array($queryku)) {
+		$fjobas = $queryku2['fjobas'];
+		$fnoreg = $queryku2['fnoreg'];
+		$fname = $queryku2['fname'];
+		$fdate = $senin;
+		$fline = $queryku2['fline'];
+		$fworsite = $queryku2['fworsite'];
+
+		if ($fjobas == "Assessor") {
+			mysqli_query($con, "insert into t_schedule_om (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Plan and Do', '', '$fnoreg', '$fname', '$fdate', '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Section Head") {
+			mysqli_query($con, "insert into t_schedule_om (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 1 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager") {
+			mysqli_query($con, "insert into t_schedule_om (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 2 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager Cross") {
+			mysqli_query($con, "insert into t_schedule_om (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 3 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Division") {
+			mysqli_query($con, "insert into t_schedule_om (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check Board and Report', '', '$fnoreg', '$fname', date_add('$fdate', interval 4 day), '$fline', '$fworsite', '$fjobas')");
+		}
+	}
+}
+
+
+
+
+
+?>
+
+
+
+
+<?php
+//Patern Schedule STW
+
+//cek ada schedule bulan ini
+$thmo = date("Y-m");
+$adakah = 0;
+$queryku = mysqli_query($con, "select count(fid) as adakah from t_schedule_stw where substr(fdate, 1, 7) = '$thmo'");
+while ($queryku2 = mysqli_fetch_array($queryku)) {
+	$adakah = $queryku2['adakah'];
+}
+
+//generate schedule
+$senin = "";
+$nh = 0;
+if ($adakah <= 7) {
+	for ($i = 1; $i <= 31; $i++) {
+
+		if ($i <= 9) {
+			$i = "0" . $i;
+		}
+		$tglnow = date("Y-m-") . $i;
+		$queryku = mysqli_query($con, "SELECT DAYOFWEEK('$tglnow') as harike");
+		while ($queryku2 = mysqli_fetch_array($queryku)) {
+			$harike = $queryku2['harike'];
+		}
+
+
+
+		if ($harike == 2) {
+			if ($nh == 1) {
+				$senin = $tglnow;
+			}
+			$nh++;
+		}
+	}
+
+
+
+
+	//create ke table
+	$queryku = mysqli_query($con, "select * from t_pattern_schedule where ftype_pillar = 'STW'");
+	while ($queryku2 = mysqli_fetch_array($queryku)) {
+		$fjobas = $queryku2['fjobas'];
+		$fnoreg = $queryku2['fnoreg'];
+		$fname = $queryku2['fname'];
+		$fdate = $senin;
+		$fline = $queryku2['fline'];
+		$fworsite = $queryku2['fworsite'];
+		
+
+		if ($fjobas == "Assessor") {
+			mysqli_query($con, "insert into t_schedule_stw (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Plan and Do', '', '$fnoreg', '$fname', '$fdate', '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Section Head") {
+			mysqli_query($con, "insert into t_schedule_stw (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 1 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager") {
+			mysqli_query($con, "insert into t_schedule_stw (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 2 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager Cross") {
+			mysqli_query($con, "insert into t_schedule_stw (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 3 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Division") {
+			mysqli_query($con, "insert into t_schedule_stw (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check Board and Report', '', '$fnoreg', '$fname', date_add('$fdate', interval 4 day), '$fline', '$fworsite', '$fjobas')");
+		}
+	}
+}
+
+
+
+
+
+?>
+
+
+
+<?php
+//Patern Schedule PM
+
+//cek ada schedule bulan ini
+$thmo = date("Y-m");
+$adakah = 0;
+$queryku = mysqli_query($con, "select count(fid) as adakah from t_schedule_pm where substr(fdate, 1, 7) = '$thmo'");
+while ($queryku2 = mysqli_fetch_array($queryku)) {
+	$adakah = $queryku2['adakah'];
+}
+
+//generate schedule
+$senin = "";
+$nh = 0;
+if ($adakah <= 7) {
+	for ($i = 1; $i <= 31; $i++) {
+
+		if ($i <= 9) {
+			$i = "0" . $i;
+		}
+		$tglnow = date("Y-m-") . $i;
+		$queryku = mysqli_query($con, "SELECT DAYOFWEEK('$tglnow') as harike");
+		while ($queryku2 = mysqli_fetch_array($queryku)) {
+			$harike = $queryku2['harike'];
+		}
+
+		if ($harike == 2) {
+			if ($nh == 3) {
+				$senin = $tglnow;
+			}
+			$nh++;
+		}
+	}
+
+
+
+
+	//create ke table
+	$queryku = mysqli_query($con, "select * from t_pattern_schedule where ftype_pillar = 'PM'");
+	while ($queryku2 = mysqli_fetch_array($queryku)) {
+		$fjobas = $queryku2['fjobas'];
+		$fnoreg = $queryku2['fnoreg'];
+		$fname = $queryku2['fname'];
+		$fdate = $senin;
+		$fline = $queryku2['fline'];
+		$fworsite = $queryku2['fworsite'];
+
+		if ($fjobas == "Assessor") {
+			mysqli_query($con, "insert into t_schedule_pm (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Plan and Do', '', '$fnoreg', '$fname', '$fdate', '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Section Head") {
+			mysqli_query($con, "insert into t_schedule_pm (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 1 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager") {
+			mysqli_query($con, "insert into t_schedule_pm (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 2 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Manager Cross") {
+			mysqli_query($con, "insert into t_schedule_pm (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check and Action', '', '$fnoreg', '$fname', date_add('$fdate', interval 3 day), '$fline', '$fworsite', '$fjobas')");
+		} elseif ($fjobas == "Division") {
+			mysqli_query($con, "insert into t_schedule_pm (finfo, fdescription, fnoreg, fname, fdate, fline, fworsite, fjobas) values ('Check Board and Report', '', '$fnoreg', '$fname', date_add('$fdate', interval 4 day), '$fline', '$fworsite', '$fjobas')");
+		}
+	}
+}
+
+
+
+
+
+?>
+
+
+
+
+
 <style>
   .card-menu {
     text-decoration: none;
@@ -171,6 +452,7 @@ while ($querykustw2 = mysqli_fetch_array($querykustw)) {
 ?>
 
 <!-- Begin Page Content -->
+<meta http-equiv="refresh" content="120">
 <div class="container-fluid p-1">
   <!-- MENU -->
   <div class="card shadow">
