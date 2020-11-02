@@ -2,7 +2,7 @@
 <?php ob_start(); ?>
 <?php session_start(); ?>
 
-<?php require_once dirname(__FILE__) . "/config/connection.php"; 
+<?php require_once dirname(__FILE__) . "/config/connection.php";
 
 
 
@@ -80,8 +80,8 @@ $regnox = $_SESSION['fnoreg'];
 
 <?php include('includes/header.php');
 
-	//
-	use PHPMailer\PHPMailer\PHPMailer;
+//
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 // Include librari phpmailer
 include('assets/phpmailer/Exception.php');
@@ -93,26 +93,27 @@ include('assets/phpmailer/SMTP.php');
 
 //
 $noflag = 1;
-$querykustw = mysqli_query($con, "select t_schedule_4s.fid, '4S' as fhave, t_schedule_4s.fline, t_schedule_4s.flag_email, t_schedule_4s.fnoreg, t_users.femail, t_users.fname from t_schedule_4s join t_users on t_schedule_4s.fnoreg = t_users.fnoreg  where t_schedule_4s.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_om.fid, 'OM' as fhave, t_schedule_om.fline, t_schedule_om.flag_email, t_schedule_om.fnoreg, t_users.femail, t_users.fname from t_schedule_om join t_users on t_schedule_om.fnoreg = t_users.fnoreg  where t_schedule_om.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_stw.fid, 'STW' as fhave, t_schedule_stw.fline, t_schedule_stw.flag_email, t_schedule_stw.fnoreg, t_users.femail, t_users.fname from t_schedule_stw join t_users on t_schedule_stw.fnoreg = t_users.fnoreg  where t_schedule_stw.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_pm.fid, 'PM' as fhave, t_schedule_pm.fline, t_schedule_pm.flag_email, t_schedule_pm.fnoreg, t_users.femail, t_users.fname from t_schedule_pm join t_users on t_schedule_pm.fnoreg = t_users.fnoreg  where t_schedule_pm.fdate = SUBSTR(NOW(), 1, 10)");
-  while ($querykustw2 = mysqli_fetch_array($querykustw)) {
-	$fid = $querykustw2['fid']; 
-	$fname = $querykustw2['fname'];  
-    $femail = $querykustw2['femail'];
-	$flag_email = $querykustw2['flag_email'];
-	$fhave = $querykustw2['fhave'];
-	$fline = $querykustw2['fline'];
-	
-	if($flag_email != '1'){
-	
+$querykustw = mysqli_query($con, "select t_schedule_4s.fid, '4S' as fhave, t_schedule_4s.fline, t_schedule_4s.fworsite t_schedule_4s.flag_email, t_schedule_4s.fnoreg, t_users.femail, t_users.fname from t_schedule_4s join t_users on t_schedule_4s.fnoreg = t_users.fnoreg  where t_schedule_4s.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_om.fid, 'OM' as fhave, t_schedule_om.fline, t_schedule_om.fworsite t_schedule_om.flag_email, t_schedule_om.fnoreg, t_users.femail, t_users.fname from t_schedule_om join t_users on t_schedule_om.fnoreg = t_users.fnoreg  where t_schedule_om.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_stw.fid, 'STW' as fhave, t_schedule_stw.fline, t_schedule_stw.fworsite t_schedule_stw.flag_email, t_schedule_stw.fnoreg, t_users.femail, t_users.fname from t_schedule_stw join t_users on t_schedule_stw.fnoreg = t_users.fnoreg  where t_schedule_stw.fdate = SUBSTR(NOW(), 1, 10) union select t_schedule_pm.fid, 'PM' as fhave, t_schedule_pm.fline, t_schedule_pm.fworsite t_schedule_pm.flag_email, t_schedule_pm.fnoreg, t_users.femail, t_users.fname from t_schedule_pm join t_users on t_schedule_pm.fnoreg = t_users.fnoreg  where t_schedule_pm.fdate = SUBSTR(NOW(), 1, 10)");
+while ($querykustw2 = mysqli_fetch_array($querykustw)) {
+  $fid = $querykustw2['fid'];
+  $fname = $querykustw2['fname'];
+  $femail = $querykustw2['femail'];
+  $flag_email = $querykustw2['flag_email'];
+  $fhave = $querykustw2['fhave'];
+  $fline = $querykustw2['fline'];
+  $fworsite = $querykustw2['fworsite'];
+
+  if ($flag_email != '1') {
 
 
-	$emailBody = 
-	"Dear ".$fname.",
+
+    $emailBody =
+      "Dear " . $fname . ",
 	
 	Pemberitahuan hari ini adalah jadwal Audit 3 Pillar System.
 	
-	LINE           : ".$fline."
-	PILLAR         : ".$fhave."
+	LINE           : " . $fline . $fworsite . "
+	PILLAR         : " . $fhave . "
 	
 	Mohon untuk klik link dibawah ini:
 	
@@ -123,7 +124,7 @@ $querykustw = mysqli_query($con, "select t_schedule_4s.fid, '4S' as fhave, t_sch
 	
 	Regards,
 	Admin 3 Pillars";
-	
+
 
     $mail = new PHPMailer;
     $mail->isSMTP();
@@ -138,36 +139,32 @@ $querykustw = mysqli_query($con, "select t_schedule_4s.fid, '4S' as fhave, t_sch
     $mail->addAddress($femail, '');
     //$mail->isHTML(true); // Aktifkan jika isi emailnya berupa html
     // Load file content.php
-   
+
     $mail->Subject = 'Email Reminder - 3 Pillars System';
     $mail->Body = $emailBody;
     $mail->AddEmbeddedImage('img/logo.png', 'logo.png'); // Aktifkan jika ingin menampilkan gambar dalam email
-    if(empty($cv)){ // Jika tanpa attachment
-        $send = $mail->send();
-        if($send){ // Jika Email berhasil dikirim
-            echo "<h1>Email berhasil dikirim tanpa lampiran</h1><br /><a href='index.php'>Kembali ke Form</a>";
-        }else{ // Jika Email gagal dikirim
-            echo "<h1>Email gagal dikirim tanpa lampiran</h1><br /><a href='index.php'>Kembali ke Form</a>";
-            // echo '<h1>ERROR<br /><small>Error while sending email: '.$mail->getError().'</small></h1>'; // Aktifkan untuk mengetahui error message
-        }
+    if (empty($cv)) { // Jika tanpa attachment
+      $send = $mail->send();
+      if ($send) { // Jika Email berhasil dikirim
+        echo "<h1>Email berhasil dikirim tanpa lampiran</h1><br /><a href='index.php'>Kembali ke Form</a>";
+      } else { // Jika Email gagal dikirim
+        echo "<h1>Email gagal dikirim tanpa lampiran</h1><br /><a href='index.php'>Kembali ke Form</a>";
+        // echo '<h1>ERROR<br /><small>Error while sending email: '.$mail->getError().'</small></h1>'; // Aktifkan untuk mengetahui error message
+      }
     }
 
-	//
-		
-	$noflag++;
-	
-	}else{
-		
-	echo "";
-	
-	}
-	mysqli_query($con, "update t_schedule_4s set flag_email = '1' where fid = '$fid'");
-	mysqli_query($con, "update t_schedule_om set flag_email = '1' where fid = '$fid'");
-	mysqli_query($con, "update t_schedule_stw set flag_email = '1' where fid = '$fid'");
-	mysqli_query($con, "update t_schedule_pm set flag_email = '1' where fid = '$fid'");
+    //
 
-	
+    $noflag++;
+  } else {
+
+    echo "";
   }
+  mysqli_query($con, "update t_schedule_4s set flag_email = '1' where fid = '$fid'");
+  mysqli_query($con, "update t_schedule_om set flag_email = '1' where fid = '$fid'");
+  mysqli_query($con, "update t_schedule_stw set flag_email = '1' where fid = '$fid'");
+  mysqli_query($con, "update t_schedule_pm set flag_email = '1' where fid = '$fid'");
+}
 
 
 
@@ -178,7 +175,7 @@ $querykustw = mysqli_query($con, "select t_schedule_4s.fid, '4S' as fhave, t_sch
   <!-- MENU -->
   <div class="card shadow">
     <div class="card-header">
-      <h6 class="m-0 font-weight-bold text-dark">Menu <?php echo $noflag;?></h6>
+      <h6 class="m-0 font-weight-bold text-dark">Menu <?php echo $noflag; ?></h6>
     </div>
     <div class="card-body p-1">
       <div class="d-flex justify-content-between row">
