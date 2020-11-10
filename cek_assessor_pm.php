@@ -51,7 +51,16 @@ $text_score = "Score : ".$score;
 
 
 
-<?php include('includes/header.php'); ?>
+<?php include('includes/header.php');
+
+		use PHPMailer\PHPMailer\PHPMailer;
+		use PHPMailer\PHPMailer\Exception;
+		// Include librari phpmailer
+		include('assets/phpmailer/Exception.php');
+		include('assets/phpmailer/PHPMailer.php');
+		include('assets/phpmailer/SMTP.php');
+
+ ?>
 <!-- Begin Page Content -->
 <div style="padding:5px">
 
@@ -1075,6 +1084,8 @@ if (isset($_POST['submit']))
   
   $fidx = $_POST["fidx"];
   
+  $blth_now = date("Y-m");
+  
   $farray_result = $xvalr1.";".$xvalr2.";".$xvalr3.";".$xvalr4.";".$xvalr5.";".$xvalr6.";".$xvalr7.";".$xvalr8.";".$xvalr9.";".$xvalr10.";".$xvalr11.";".$xvalr12.";".$xvalr13.";".$xvalr14.";".$xvalr15.";".$xvalr16.";".$xvalr17.";".$xvalr18.";".$xvalr19.";".$xvalr20.";".$xvalr21.";".$xvalr22.";".$xvalr23.";".$xvalr24.";".$xvalr25.";".$xvalr26.";".$xvalr27.";".$xvalr28;
 
   $farray_score = $xvals1.";".$xvals2.";".$xvals3.";".$xvals4.";".$xvals5.";".$xvals6.";".$xvals7.";".$xvals8.";".$xvals9.";".$xvals10.";".$xvals11.";".$xvals12.";".$xvals13.";".$xvals14.";".$xvals15.";".$xvals16.";".$xvals17.";".$xvals18.";".$xvals19.";".$xvals20.";".$xvals21.";".$xvals22.";".$xvals23.";".$xvals24.";".$xvals25.";".$xvals26.";".$xvals27.";".$xvals28;
@@ -1083,6 +1094,149 @@ if (isset($_POST['submit']))
     $fscore = $xvals1 + $xvals2 + $xvals3 + $xvals4 + $xvals5 + $xvals6 + $xvals7 + $xvals8 + $xvals9 + $xvals10 + $xvals11 + $xvals12 + $xvals13 + $xvals14 + $xvals15 + $xvals16 + $xvals17 + $xvals18 + $xvals19 + $xvals20 + $xvals21 + $xvals22 + $xvals23 + $xvals24 + $xvals25 + $xvals26 + $xvals27 + $xvals28;
 
         $score = round(($fscore / 84) * 100);
+		
+	//Awal Email
+	
+	
+	$get = mysqli_query($con, "select *, 'PM' as fhave from t_schedule_pm where fid = '$fidx'");
+   while($get2=mysqli_fetch_array($get))
+   {
+	$fname = $get2['fname']; 
+	$fline = $get2['fline']; 
+	$fworsite = $get2['fworsite']; 
+	$fhave = $get2['fhave']; 
+	$fjobas = $get2['fjobas'];	
+	
+	
+	if($fjobas == 'Assessor'){
+			$getjobas = 'Section Head';
+	}else if($fjobas == 'Section Head'){
+			$getjobas = 'Manager';
+	}else if($fjobas == 'Manager'){
+			$getjobas = 'Manager Cross';
+	}else if($fjobas == 'Manager Cross'){
+			$getjobas = 'Division';
+	}	
+	
+	
+	$getlv = mysqli_query($con, "select fname from t_schedule_pm where fworsite = '$fworsite' and fline = '$fline' and fjobas = '$getjobas'");
+   while($getlv2=mysqli_fetch_array($getlv))
+   {
+	$fnamelv = $getlv2['fname']; 
+   }
+	
+	
+	$getemail = mysqli_query($con, "select femail from t_users where fname = '$fnamelv'");
+   while($getemail2=mysqli_fetch_array($getemail))
+   {
+	$femaillv = $getemail2['femail']; 
+   }
+	
+	
+	
+   }
+   
+   $no = 1;
+   
+   
+	
+	//	
+		
+	
+	 $emailBody =
+    "Dear Admin<br/><br/>
+	<br/>
+	
+	
+	Nama 		: ".$fname."<br/>
+	Line 		: ".$fline." ".$fworsite."<br/>
+	Pilar 		: ".$fhave."<br/>
+	Jobas 		: ".$fjobas."<br/>
+	Nilai 		: ".$score."<br/>
+	
+	";
+	
+	$emailBody .="<h4><b>Isi Temuan</b></h4>";
+    $emailBody .="<br/>";
+    $emailBody .="<table width=\"100%\" border=\"1\" align=\"center\" cellpadding=\"3\" cellspacing=\"0\">";
+    $emailBody .="<tr style=\"bgcolor: blue;\">";
+    $emailBody .="<td  width=\"5%\">No</td><td width=\"10%\">Item</td><td width=\"10%\"></td><td width=\"10%\">Silver</td><td width=\"10%\">Gold</td><td width=\"10%\">Deskripsi</td><td width=\"15%\">Note</td><td width=\"30%\">Temuan</td><td width=\"20%\">Tanggal</td>";
+    $emailBody .="</tr>";
+	
+
+$queryku = mysqli_query($con, "select *, substring(fdate_modified, 1, 7) from t_finding_pm where fid_schedule = '$fidx' and substring(fdate_modified, 1, 7) = '$blth_now' order by fid ASC");
+while($queryku2=mysqli_fetch_array($queryku))
+{
+	$fphoto = $queryku2['fphoto'];
+	$fnote = $queryku2['fnote'];
+	$fdate_modified = $queryku2['fdate_modified'];
+	$fid_score = $queryku2['fid_score'];
+	
+	
+	$des = mysqli_query($con, "select * from t_form_pm where fid = '$fid_score'");
+	while($des2=mysqli_fetch_array($des))
+{
+	
+	$fitem1 = $des2['fitem1'];
+	$fitem2 = $des2['fitem2'];
+	$fsilver = $des2['fsilver'];
+	$fgold = $des2['fgold'];
+	$fdesc = $des2['fdesc'];
+
+
+	$myXMLData ="<?xml version='1.0' encoding='UTF-8'?>";
+	$myXMLData .= "<note><to></to><from></from><heading></heading><body>$fnote</body></note>";
+
+    $xml=simplexml_load_string($myXMLData) or die('Error: Cannot create object'); 
+
+	
+	$emailBody .="<tr>";
+    $emailBody .="<td>$no</td><td>$fitem1</td><td>$fitem2</td><td>$fsilver</td><td>$fgold</td><td>$fdesc</td><td>$xml->body</td><td><img style='width:100px;' src='".LOC_IMAGE."images/temuanPM/".$fphoto."' /></td><td>$fdate_modified</td>";
+    $emailBody .="</tr>";
+		
+	$no++;
+	}
+	
+	}
+	
+	$emailBody .="</table>";
+	
+	$emailBody .=
+	
+	
+	"
+	<br/><br/><br/>
+	Terima kasih atas kerjasamanya.
+	<br/><br/>
+	
+	
+	Regards,<br/>
+	Admin 3 Pillars";
+
+
+    $mail = new PHPMailer;
+	$mail->isHTML(true);
+    $mail->isSMTP();
+    $mail->Host = 'smartandonplant3.com';
+    $mail->Username = 'info@smartandonplant3.com'; // Email Pengirim
+    $mail->Password = '4d4pt1v3'; // Isikan dengan Password email pengirim
+    $mail->Port = 465;
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = 'ssl';
+    // $mail->SMTPDebug = 2; // Aktifkan untuk melakukan debugging
+    $mail->setFrom('info@smartandonplant3.com', 'Mailer');
+	//$mail->addAddress('prastyaharyantop@gmail.com', '');
+    $mail->addAddress('fajar.cahyono@toyota.co.id', '');
+	$mail->AddCC($femaillv, '');
+    //$mail->isHTML(true); // Aktifkan jika isi emailnya berupa html
+    // Load file content.php
+
+    $mail->Subject = 'Email Reminder - 3 Pillars System';
+    $mail->Body = $emailBody;
+	 $send = $mail->send();
+	
+	
+	//Akhir EMail
   
   
   //echo "update t_schedule_om set farray_result = '$farray_result', farray_score = '$farray_score' where fid = '$fidx'";
@@ -1185,6 +1339,8 @@ if (isset($_POST['submit_temuan']))
   
   $fidx = $_POST["fid_schedule"];
   
+    $blth_now = date("Y-m");
+  
   $farray_result = $xvalr1.";".$xvalr2.";".$xvalr3.";".$xvalr4.";".$xvalr5.";".$xvalr6.";".$xvalr7.";".$xvalr8.";".$xvalr9.";".$xvalr10.";".$xvalr11.";".$xvalr12.";".$xvalr13.";".$xvalr14.";".$xvalr15.";".$xvalr16.";".$xvalr17.";".$xvalr18.";".$xvalr19.";".$xvalr20.";".$xvalr21.";".$xvalr22.";".$xvalr23.";".$xvalr24.";".$xvalr25.";".$xvalr26.";".$xvalr27.";".$xvalr28;
 
   $farray_score = $xvals1.";".$xvals2.";".$xvals3.";".$xvals4.";".$xvals5.";".$xvals6.";".$xvals7.";".$xvals8.";".$xvals9.";".$xvals10.";".$xvals11.";".$xvals12.";".$xvals13.";".$xvals14.";".$xvals15.";".$xvals16.";".$xvals17.";".$xvals18.";".$xvals19.";".$xvals20.";".$xvals21.";".$xvals22.";".$xvals23.";".$xvals24.";".$xvals25.";".$xvals26.";".$xvals27.";".$xvals28;
@@ -1193,7 +1349,8 @@ if (isset($_POST['submit_temuan']))
     $fscore = $xvals1 + $xvals2 + $xvals3 + $xvals4 + $xvals5 + $xvals6 + $xvals7 + $xvals8 + $xvals9 + $xvals10 + $xvals11 + $xvals12 + $xvals13 + $xvals14 + $xvals15 + $xvals16 + $xvals17 + $xvals18 + $xvals19 + $xvals20 + $xvals21 + $xvals22 + $xvals23 + $xvals24 + $xvals25 + $xvals26 + $xvals27 + $xvals28;
 
         $score = round(($fscore / 84) * 100);
-  
+		
+ 
   
   //echo "update t_schedule_om set farray_result = '$farray_result', farray_score = '$farray_score' where fid = '$fidx'";
 
@@ -1417,5 +1574,19 @@ if (isset($_POST['submit_temuan']))
 </script>
 
 
+<?php
+$fafterdel = $_GET['fafterdel'];
+$fafteredit = $_GET['fafteredit'];
+$fid_afterdel = $_GET['fid'];
+$fid_score_afterdel = $_GET['fid_score'];
 
+if($fafterdel == "1"){
+	echo "<script>$('#myModal').modal('show');getId('$fid_score_afterdel','$fid_afterdel');</script>";
+}
+
+else if($fafteredit == "1"){
+	echo "<script>$('#myModal').modal('show');getId('$fid_score_afterdel','$fid_afterdel');</script>";
+}
+
+?>
 
