@@ -267,16 +267,33 @@ if ($adakah <= 7) {
 	<div class="card shadow mb-4">
 		<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 			<h6 class="m-0 font-weight-bold text-primary">Result Audit</h6>
-			<select>
+					<select id="selectid" onchange="filtering()">
+			
+			<?php $xpilih = $_GET["q"]; ?>
 				<option value="">All</option>
-				<option value="Casting">Casting</option>
-				<option value="Machining">Machining</option>
-				<option value="Assy">Assy</option>
-				<option value="Support">Support</option>
+				<option value="Casting" <?php if ($xpilih == 'Casting') { echo "selected"; } ?>>Casting</option>
+				<option value="Machining" <?php if ($xpilih == 'Machining') { echo "selected"; } ?>>Machining</option>
+				<option value="Assy" <?php if ($xpilih == 'Assy') { echo "selected"; } ?>>Assy</option>
+				<option value="Support" <?php if ($xpilih == 'Support') { echo "selected"; } ?>>Support</option>
 			</select>
+			
+		<script>
+          function filtering() {
+            var selectid = document.getElementById("selectid").value;
+            window.location = "dashboard_pm.php?q=" + selectid;
+          }
+        </script>
 		</div>
 		<div class="card-body">
 			<?php
+			
+			$xfilter = "";
+            $xfilter = $_GET["q"];
+            if ($xfilter != "") {
+              $cond = " and t_schedule_pm.fline = '$xfilter'";
+            } else {
+              $cond = "";
+            }
 
 /*
 						if ($regnox == 'admin') {
@@ -284,7 +301,7 @@ if ($adakah <= 7) {
 						} else {
 
 */							
-							$queryku = mysqli_query($con, "select t_schedule_pm.*, DAYNAME(date(t_schedule_pm.fdate)) as fday, t_pattern_schedule.fjobas from t_schedule_pm join t_pattern_schedule on t_schedule_pm.fnoreg = t_pattern_schedule.fnoreg where t_schedule_pm.finfo = 'plan and do' and t_pattern_schedule.ftype_pillar = 'PM' group by t_schedule_pm.fid desc");
+							$queryku = mysqli_query($con, "select t_schedule_pm.*, DAYNAME(date(t_schedule_pm.fdate)) as fday, t_pattern_schedule.fjobas from t_schedule_pm join t_pattern_schedule on t_schedule_pm.fnoreg = t_pattern_schedule.fnoreg where t_schedule_pm.finfo = 'plan and do' $cond and t_pattern_schedule.ftype_pillar = 'PM' group by t_schedule_pm.fid desc");
 //}
 
 

@@ -14,6 +14,8 @@ $active_pm = "";
 $active_om = "";
 
 $regnox = $_SESSION['fnoreg'];
+
+$thmo = date("Y-m");
 ?>
 
 
@@ -86,8 +88,8 @@ if ($adakah <= 7) {
 
 
 
-
 <?php include('includes/header.php'); ?>
+
 
 <!-- Begin Page Content -->
 <div class="container-fluid p-1">
@@ -198,16 +200,33 @@ if ($adakah <= 7) {
 	<div class="card shadow mb-4">
 		<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 			<h6 class="m-0 font-weight-bold text-primary">Result Audit</h6>
-			<select>
+			<select id="selectid" onchange="filtering()">
+			
+			<?php $xpilih = $_GET["q"]; ?>
 				<option value="">All</option>
-				<option value="Casting">Casting</option>
-				<option value="Machining">Machining</option>
-				<option value="Assy">Assy</option>
-				<option value="Support">Support</option>
+				<option value="Casting" <?php if ($xpilih == 'Casting') { echo "selected"; } ?>>Casting</option>
+				<option value="Machining" <?php if ($xpilih == 'Machining') { echo "selected"; } ?>>Machining</option>
+				<option value="Assy" <?php if ($xpilih == 'Assy') { echo "selected"; } ?>>Assy</option>
+				<option value="Support" <?php if ($xpilih == 'Support') { echo "selected"; } ?>>Support</option>
 			</select>
+			
+		<script>
+          function filtering() {
+            var selectid = document.getElementById("selectid").value;
+            window.location = "dashboard_4s.php?q=" + selectid;
+          }
+        </script>
 		</div>
 		<div class="card-body">
 			<?php
+			
+			$xfilter = "";
+            $xfilter = $_GET["q"];
+            if ($xfilter != "") {
+              $cond = " and t_schedule_4s.fline = '$xfilter'";
+            } else {
+              $cond = "";
+            }
 
 /*
 						if ($regnox == 'admin') {
@@ -215,7 +234,7 @@ if ($adakah <= 7) {
 						} else {
 
 */							
-							$queryku = mysqli_query($con, "select t_schedule_4s.*, DAYNAME(date(t_schedule_4s.fdate)) as fday, t_pattern_schedule.fjobas from t_schedule_4s join t_pattern_schedule on t_schedule_4s.fnoreg = t_pattern_schedule.fnoreg where t_schedule_4s.finfo = 'plan and do' group by t_schedule_4s.fid desc");
+			$queryku = mysqli_query($con, "select t_schedule_4s.*, DAYNAME(date(t_schedule_4s.fdate)) as fday, t_pattern_schedule.fjobas from t_schedule_4s join t_pattern_schedule on t_schedule_4s.fnoreg = t_pattern_schedule.fnoreg where t_schedule_4s.finfo = 'plan and do' $cond group by t_schedule_4s.fid desc");
 //}
 
 
@@ -256,7 +275,7 @@ if ($adakah <= 7) {
 					$fworsitex = $queryku2['fworsite'];			
 				}
 			
-								$query_acc =  mysqli_query($con, "SELECT t_schedule_4s.*, t_pattern_schedule.fname from t_schedule_4s  join t_pattern_schedule on t_schedule_4s.fnoreg = t_pattern_schedule.fnoreg where t_pattern_schedule.fjobas = 'Assessor' and t_schedule_4s.fid = '$fid' and t_schedule_4s.fworsite = '$fworsite' and t_pattern_schedule.ftype_pillar = '4S'");
+				$query_acc =  mysqli_query($con, "SELECT t_schedule_4s.*, t_pattern_schedule.fname from t_schedule_4s  join t_pattern_schedule on t_schedule_4s.fnoreg = t_pattern_schedule.fnoreg where t_pattern_schedule.fjobas = 'Assessor' and t_schedule_4s.fid = '$fid' and t_schedule_4s.fworsite = '$fworsite' and t_pattern_schedule.ftype_pillar = '4S'");
 				while ($query_acc2 = mysqli_fetch_array($query_acc)) {
 				$acc = $query_acc2['fname'];
 				$fid_pd_acc = $query_acc2['fid_pd'];
@@ -275,7 +294,7 @@ if ($adakah <= 7) {
 				
 				
 				/*$query_sh =  mysqli_query($con, "SELECT t_schedule_4s.fid, t_pattern_schedule.fname from t_pattern_schedule join t_schedule_4s on t_schedule_4s.fnoreg = t_pattern_schedule.fnoreg where t_pattern_schedule.fline='$fline' and t_pattern_schedule.fworsite = '$fworsite' and t_pattern_schedule.fjobas = 'Section Head' and t_schedule_4s.fid = '$fid' limit 1");*/
-				$query_sh =  mysqli_query($con, "SELECT t_schedule_4s.* from t_schedule_4s join t_pattern_schedule on t_schedule_4s.fnoreg = t_pattern_schedule.fnoreg where t_schedule_4s.fjobas = 'Section Head' and t_schedule_4s.fid_pd = '$fid' and t_pattern_schedule.ftype_pillar = '4S' and t_schedule_4s.fworsite = '$fworsite' and t_schedule_4s.finfo = 'Check and Action' group by t_schedule_4s.fid_pd limit 1");
+				$query_sh =  mysqli_query($con, "SELECT * from t_schedule_4s where fjobas = 'Section Head' and fworsite = '$fworsite' and substring(fdate, 1, 7) = '$thmo'");
 				while ($query_sh2 = mysqli_fetch_array($query_sh)) {
 				
 				
@@ -287,17 +306,17 @@ if ($adakah <= 7) {
 				//SH	
 				
 			
-				if($fid_pd_sh == $fid){
-					$bg_sh = "bg-success";
-					
-				}else if($fid_pd_sh != $fid){
-					$bg_sh = "bg-danger";
-				}else if($farray_value_sh != ''){
+				if($farray_value_sh != ''){
 					$bg_sh = "bg-success";
 				}else if($fdate_sh < date("Y-m-d")){
 					$bg_sh = "bg-danger";	
-				}
-				else if($fid_pd_sh == ''){
+				}else if($fid_pd_sh == ''){
+					$bg_sh = "bg-info";	
+				}else if($fid_pd_sh == $fid){
+					$bg_sh = "bg-success";					
+				}else if($fid_pd_sh != $fid){
+					$bg_sh = "bg-danger";
+				}else if($fid_pd_sh == ''){
 					$bg_sh = "bg-info";
 				
 				}	
@@ -316,15 +335,19 @@ if ($adakah <= 7) {
 				$fdate_mgr = $query_cross2['fdate'];
 				}	
 				
-				//MGR
-				if($fid_pd_mgr == $fid){
+								//MGR
+				if($farray_value_mgr != ''){
+					$bg_mgr = "bg-success";
+				}else if($fdate_mgr < date("Y-m-d")){
+					$bg_mgr = "bg-danger";	
+				}else if($fid_pd_mgr == ''){
+					$bg_mgr = "bg-info";	
+				}else if($fid_pd_mgr == $fid){
 					$bg_mgr = "bg-success";
 				}else if($fid_pd_mgr != $fid){
 					$bg_mgr = "bg-danger";
 				}else if($farray_value_mgr != ''){
 					$bg_mgr = "bg-success";
-				}else if($fdate_mgr < date("Y-m-d")){
-					$bg_mgr = "bg-danger";	
 				}else if($farray_value_mgr == ''){
 					$bg_mgr = "bg-info";
 				}
@@ -341,14 +364,16 @@ if ($adakah <= 7) {
 				}	
 				
 				//CROSS
-				if($fid_pd_cross == $fid){
-					$bg_cross = "bg-success";
-				}else if($fid_pd_cross != $fid){
-					$bg_cross = "bg-danger";
-				}else if($farray_value_cross != ''){
+				if($farray_value_cross != ''){
 					$bg_cross = "bg-success";
 				}else if($fdate_cross < date("Y-m-d")){
 					$bg_cross = "bg-danger";	
+				}else if($fid_pd_cross == ''){
+					$bg_cross = "bg-info";	
+				}else if($fid_pd_cross == $fid){
+					$bg_cross = "bg-success";
+				}else if($fid_pd_cross != $fid){
+					$bg_cross = "bg-danger";
 				}else if($farray_value_cross == ''){
 					$bg_cross = "bg-info";
 				}
@@ -364,20 +389,19 @@ if ($adakah <= 7) {
 				}	
 				
 				//Division
-				if($fid_pd_div == $fid){
+				if($fid_pd_div != ''){
 					$bg_div = "bg-success";
 				}else if($fdate_div < date("Y-m-d")){
 					$bg_div = "bg-danger";	
+				}else if($fid_pd_div == ''){
+					$bg_div = "bg-info";	
+				}else if($fid_pd == $fid){
+					$bg_div = "bg-success";
 				}else if($fid_pd_div != $fid){
-					$bg_div = "bg-info";
-				}else if($fid_pd_div != ''){
-					$bg_div = "bg-success";
-				}else if($fdate_div < date("Y-m-d")){
-					$bg_div = "bg-danger";	
-				}else if($farray_value_div == ''){	
+					$bg_div = "bg-danger";
+				}else if($farray_value_div == ''){
 					$bg_div = "bg-info";
 				}
-					
 
 
 
