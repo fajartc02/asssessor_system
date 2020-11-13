@@ -457,7 +457,7 @@ while ($querykustw2 = mysqli_fetch_array($querykustw)) {
   <!-- MENU -->
   <div class="card shadow">
     <div class="card-header">
-      <h6 class="m-0 font-weight-bold text-dark">Menu <?php echo $noflag; ?></h6>
+      <h6 class="m-0 font-weight-bold text-dark">Main Menu</h6>
     </div>
     <div class="card-body p-1">
       <div class="d-flex justify-content-between row">
