@@ -15,6 +15,8 @@ $active_om = "active";
 
 $regnox = $_SESSION['fnoreg'];
 
+$thmo = date("Y-m");
+
 ?>
 
 
@@ -275,7 +277,7 @@ if ($adakah <= 7) {
 				
 				
 				/*$query_sh =  mysqli_query($con, "SELECT t_schedule_om.fid, t_pattern_schedule.fname from t_pattern_schedule join t_schedule_om on t_schedule_om.fnoreg = t_pattern_schedule.fnoreg where t_pattern_schedule.fline='$fline' and t_pattern_schedule.fworsite = '$fworsite' and t_pattern_schedule.fjobas = 'Section Head' and t_schedule_om.fid = '$fid' limit 1");*/
-				$query_sh =  mysqli_query($con, "SELECT t_schedule_om.* from t_schedule_om join t_pattern_schedule on t_schedule_om.fnoreg = t_pattern_schedule.fnoreg where t_schedule_om.fjobas = 'Section Head' and t_schedule_om.fid_pd = '$fid' and t_pattern_schedule.ftype_pillar = 'OM' and t_schedule_om.fworsite = '$fworsite' and t_schedule_om.finfo = 'Check and Action' group by t_schedule_om.fid_pd limit 1");
+				$query_sh =  mysqli_query($con, "SELECT * from t_schedule_om where fjobas = 'Section Head' and fworsite = '$fworsite' and substring(fdate, 1, 7) = '$thmo'");
 				while ($query_sh2 = mysqli_fetch_array($query_sh)) {
 				
 				
@@ -287,17 +289,12 @@ if ($adakah <= 7) {
 				//SH	
 				
 			
-				if($fid_pd_sh == $fid){
-					$bg_sh = "bg-success";
-					
-				}else if($fid_pd_sh != $fid){
-					$bg_sh = "bg-danger";
-				}else if($farray_value_sh != ''){
+				if($farray_value_sh != ''){
 					$bg_sh = "bg-success";
 				}else if($fdate_sh < date("Y-m-d")){
 					$bg_sh = "bg-danger";	
 				}
-				else if($fid_pd_sh == ''){
+				else if($farray_value_sh == ''){
 					$bg_sh = "bg-info";
 				
 				}	
@@ -308,7 +305,7 @@ if ($adakah <= 7) {
 				}
 				
 				*/
-				$query_cross =  mysqli_query($con, "SELECT t_schedule_om.fid_pd, t_pattern_schedule.fname, t_schedule_om.farray_score, t_schedule_om.fdate from t_schedule_om  join t_pattern_schedule on t_schedule_om.fnoreg = t_pattern_schedule.fnoreg where t_schedule_om.fjobas = 'Manager' and t_schedule_om.fworsite = '$fworsite' and t_schedule_om.fid_pd = '$fid' and t_pattern_schedule.ftype_pillar = 'OM' and t_schedule_om.finfo = 'Check and Action'");
+				$query_cross =  mysqli_query($con, "SELECT * from t_schedule_om where fjobas = 'Manager' and fworsite = '$fworsite' and substring(fdate, 1, 7) = '$thmo'");
 				while ($query_cross2 = mysqli_fetch_array($query_cross)) {
 				$mgr = $query_cross2['fname'];
 				$fid_pd_mgr = $query_cross2['fid_pd'];
@@ -317,11 +314,7 @@ if ($adakah <= 7) {
 				}	
 				
 				//MGR
-				if($fid_pd_mgr == $fid){
-					$bg_mgr = "bg-success";
-				}else if($fid_pd_mgr != $fid){
-					$bg_mgr = "bg-danger";
-				}else if($farray_value_mgr != ''){
+				if($farray_value_mgr != ''){
 					$bg_mgr = "bg-success";
 				}else if($fdate_mgr < date("Y-m-d")){
 					$bg_mgr = "bg-danger";	
@@ -332,7 +325,7 @@ if ($adakah <= 7) {
 				
 				
 				
-				$query_cross =  mysqli_query($con, "SELECT t_schedule_om.fid_pd, t_pattern_schedule.fname, t_schedule_om.farray_score, t_schedule_om.fdate from t_schedule_om  join t_pattern_schedule on t_schedule_om.fnoreg = t_pattern_schedule.fnoreg where t_schedule_om.fjobas = 'Manager Cross' and t_schedule_om.fworsite = '$fworsite' and t_schedule_om.fid_pd = '$fid' and t_pattern_schedule.ftype_pillar = 'OM' and t_schedule_om.finfo = 'Check and Action'");
+				$query_cross =  mysqli_query($con, "SELECT * from t_schedule_om where fjobas = 'Manager Cross' and fworsite = '$fworsite' and substring(fdate, 1, 7) = '$thmo'");
 				while ($query_cross2 = mysqli_fetch_array($query_cross)) {
 				$cross = $query_cross2['fname'];
 				$fid_pd_cross = $query_cross2['fid_pd'];
@@ -341,11 +334,7 @@ if ($adakah <= 7) {
 				}	
 				
 				//CROSS
-				if($fid_pd_cross == $fid){
-					$bg_cross = "bg-success";
-				}else if($fid_pd_cross != $fid){
-					$bg_cross = "bg-danger";
-				}else if($farray_value_cross != ''){
+				if($farray_value_cross != ''){
 					$bg_cross = "bg-success";
 				}else if($fdate_cross < date("Y-m-d")){
 					$bg_cross = "bg-danger";	
@@ -355,7 +344,7 @@ if ($adakah <= 7) {
 				
 				
 				
-				$query_div =  mysqli_query($con, "SELECT t_schedule_om.fid_pd, t_pattern_schedule.fname, t_schedule_om.farray_score, t_schedule_om.fdate from t_schedule_om  join t_pattern_schedule on t_schedule_om.fnoreg = t_pattern_schedule.fnoreg where t_schedule_om.fjobas = 'Division' and t_schedule_om.fid_pd = '$fid' and t_schedule_om.fworsite = '$fworsite' and t_pattern_schedule.ftype_pillar = 'OM' and t_schedule_om.finfo = 'Check Board and Report'");
+				$query_div =  mysqli_query($con, "SELECT * from t_schedule_om where fjobas = 'Division' and fworsite = '$fworsite' and substring(fdate, 1, 7) = '$thmo'");
 				while ($query_div2 = mysqli_fetch_array($query_div)) {
 				$div = $query_div2['fname'];
 				$fid_pd_div = $query_div2['fid_pd'];
@@ -364,16 +353,12 @@ if ($adakah <= 7) {
 				}	
 				
 				//Division
-				if($fid_pd == $fid){
+				if($farray_value_div != ''){
 					$bg_div = "bg-success";
-				}else if($fid_pd_div != $fid){
-					$bg_div = "bg-danger";
-				}else if($fid_pd_div != ''){
-					$bg_div = "bg-success";
-				}else if($fdate_div < date("Y-m-d")){
-					$bg_div = "bg-danger";	
 				}else if($farray_value_div == ''){	
 					$bg_div = "bg-info";
+				}else if($fdate_div < date("Y-m-d")){
+					$bg_div = "bg-danger";	
 				}
 					
 								
@@ -508,23 +493,23 @@ if ($adakah <= 7) {
 				
 				<div class="row border justify-content-around">
 					<div class="col-2 <?php echo $bg_acc; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Acc / <?php echo $acc; ?> /  <?php echo $fid_pd_acc; ?></center>
+						<center>Acc</center>
 						<br/>
 					</div>
 					<div class="col-2  <?php echo $bg_sh; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>SH / <?php echo $sh; ?> / <?php echo $fid_pd_sh; ?></center>
+						<center>SH</center>
 						<br/>
 					</div>
 					<div class="col-2 <?php echo $bg_mgr; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Mgr / <?php echo $mgr; ?> / <?php echo $fid_pd_mgr; ?></center>
+						<center>Mgr</center>
 						<br/>
 					</div>
 					<div class="col-2 <?php echo $bg_cross; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Crs Mgr / <?php echo $cross; ?> / <?php echo $fid_pd_cross; ?></center>
+						<center>Crs Mgr</center>
 						<br/>
 					</div>
 					<div class="col-2 <?php echo $bg_div; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Div / <?php echo $div; ?> / <?php echo $fid_pd_div; ?></center>
+						<center>Div</center>
 						<br/>
 					</div>
 				</div>

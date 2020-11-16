@@ -316,18 +316,11 @@ if ($adakah <= 7) {
 			
 				if($farray_value_sh != ''){
 					$bg_sh = "bg-success";
-				}else if($fid_pd_sh == ''){
-					$bg_sh = "bg-info";	
-				}else if($fid_pd_sh == $fid){
-					$bg_sh = "bg-success";					
-				}else if($fid_pd_sh != $fid){
-					$bg_sh = "bg-danger";
 				}else if($fdate_sh < date("Y-m-d")){
 					$bg_sh = "bg-danger";	
-				}else if($fid_pd_sh == ''){
-					$bg_sh = "bg-info";
-				
-				}	
+				}else if($farray_value_sh == ''){
+					$bg_sh = "bg-info";	
+				}
 				
 				/*
 				else if{
@@ -346,18 +339,10 @@ if ($adakah <= 7) {
 				//MGR
 				if($farray_value_mgr != ''){
 					$bg_mgr = "bg-success";
-				}else if($fid_pd_mgr == $fid){
-					$bg_mgr = "bg-success";
-				}else if($fid_pd_mgr == ''){
-					$bg_mgr = "bg-info";	
-				}else if($fid_pd_mgr != $fid){
-					$bg_mgr = "bg-danger";
-				}else if($farray_value_mgr != ''){
-					$bg_mgr = "bg-success";
 				}else if($fdate_mgr < date("Y-m-d")){
 					$bg_mgr = "bg-danger";	
 				}else if($farray_value_mgr == ''){
-					$bg_mgr = "bg-info";
+					$bg_mgr = "bg-info";	
 				}
 				
 				
@@ -374,12 +359,6 @@ if ($adakah <= 7) {
 				//CROSS
 				if($farray_value_cross != ''){
 					$bg_cross = "bg-success";
-				}else if($fid_pd_cross == ''){
-					$bg_cross = "bg-info";	
-				}else if($fid_pd_cross == $fid){
-					$bg_cross = "bg-success";
-				}else if($fid_pd_cross != $fid){
-					$bg_cross = "bg-danger";
 				}else if($fdate_cross < date("Y-m-d")){
 					$bg_cross = "bg-danger";	
 				}else if($farray_value_cross == ''){
@@ -397,19 +376,14 @@ if ($adakah <= 7) {
 				}	
 				
 				//Division
-				if($fid_pd_div != ''){
+				if($farray_value_div != ''){
 					$bg_div = "bg-success";
 				}else if($fdate_div < date("Y-m-d")){
 					$bg_div = "bg-danger";	
-				}else if($fid_pd_div == ''){
-					$bg_div = "bg-info";	
-				}else if($fid_pd == $fid){
-					$bg_div = "bg-success";
-				}else if($fid_pd_div != $fid){
-					$bg_div = "bg-danger";
-				}else if($farray_value_div == ''){
+				}else if($farray_value_div == ''){	
 					$bg_div = "bg-info";
 				}
+					
 					
 								
 
@@ -423,10 +397,6 @@ if ($adakah <= 7) {
 					
 						<b><?php echo $fname; ?></b>
 						
-						
-						
-						<b><?php echo $fid; ?></b>
-			
 						<br>
 						<p class="p-0 m-0" style="font-size: 9px"><?php echo $fworsite; ?></p>
 						<p class="p-0 m-0">STW</p>
@@ -522,23 +492,23 @@ if ($adakah <= 7) {
 				
 				<div class="row border justify-content-around">
 					<div class="col-2 <?php echo $bg_acc; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Acc / <?php echo $acc; ?> /  <?php echo $fid_pd_acc; ?></center>
+						<center>Acc</center>
 						<br/>
 					</div>
 					<div class="col-2  <?php echo $bg_sh; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>SH / <?php echo $sh; ?> / <?php echo $fid_pd_sh; ?></center>
+						<center>SH</center>
 						<br/>
 					</div>
 					<div class="col-2 <?php echo $bg_mgr; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Mgr / <?php echo $mgr; ?> / <?php echo $fid_pd_mgr; ?></center>
+						<center>Mgr</center>
 						<br/>
 					</div>
 					<div class="col-2 <?php echo $bg_cross; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Crs Mgr / <?php echo $cross; ?> / <?php echo $fid_pd_cross; ?></center>
+						<center>Crs Mgr</center>
 						<br/>
 					</div>
 					<div class="col-2 <?php echo $bg_div; ?> m-1 rounded" style="height: 12px;font-size: 9px;color: white">
-						<center>Div / <?php echo $div; ?> / <?php echo $fid_pd_div; ?></center>
+						<center>Div</center>
 						<br/>
 					</div>
 				</div>
