@@ -355,10 +355,10 @@ if ($adakah <= 7) {
 				//Division
 				if($farray_value_div != ''){
 					$bg_div = "bg-success";
-				}else if($farray_value_div == ''){	
-					$bg_div = "bg-info";
 				}else if($fdate_div < date("Y-m-d")){
 					$bg_div = "bg-danger";	
+				}else if($farray_value_div == ''){	
+					$bg_div = "bg-info";
 				}
 					
 								

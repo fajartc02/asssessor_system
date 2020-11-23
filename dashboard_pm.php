@@ -101,10 +101,10 @@ if ($adakah <= 7) {
 		<h1 class="h3 mb-0 text-gray-800">Dashboard PM</h1>
 	</center><br>
 
-	<!--<div class="row">
+	<div class="row">
 	<div class="col-md-6"></div>
-	<div class="col-md-6" style="text-align:right;color:black">Guidance Ok of PM : <a href="guidance_pdf.php?ffile=guidance_pm.pdf&link_back=dashboard_pm.php">guidance_pm.pdf (click)</a></div>
-	</div>-->
+	<!--<div class="col-md-6" style="text-align:right;color:black">Guidance Ok of PM : <a href="guidance_pdf.php?ffile=guidance_pm.pdf&link_back=dashboard_pm.php">guidance_pm.pdf (click)</a></div>-->
+	</div>
 
 	<div class="card shadow mb-4" style="height:500px;overflow-y: scroll;">
 		<div class="card-header py-3">
