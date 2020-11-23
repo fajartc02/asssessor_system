@@ -598,7 +598,7 @@ if (isset($_POST['submit_temuan']))
 	for($i=1;$i<=$jml_form_om;$i++){
 		?>
 
-	<input type="text" name="valr<?php echo $i; ?>" id="valr<?php echo $i; ?>_" />	
+	<input type="hidden" name="valr<?php echo $i; ?>" id="valr<?php echo $i; ?>_" />	
     
 	<?php  } ?>
 	  
