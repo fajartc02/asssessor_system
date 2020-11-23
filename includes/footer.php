@@ -131,6 +131,35 @@
     });
 </script>
 
+
+
+<script>
+
+function update4s(fid) {
+      
+    var dataString = "fid="+fid; 	
+	//alert(dataString);
+	
+	var yoi = "oke"+fid;
+	
+	 $.ajax({
+    type: 'POST',
+    data: dataString,
+    url: 'status_dashboard_4s_os.php',       
+    success: function(htmlx) {
+      var myStr = htmlx;
+      document.getElementById(yoi).innerHTML = "On Solving";
+    }
+    });
+	
+	
+	
+  }	
+	
+
+</script>
+
+
 </body>
 
 </html>

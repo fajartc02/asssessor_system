@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -190,7 +191,7 @@ var xlwcty = {"ajax_url":"https:\/\/mdbootstrap.com\/wp-admin\/admin-ajax.php","
 	  
 	  
 	  <li class="nav-item <?php echo $active_form; ?>">
-        <a class="nav-link collapsed" href="index_form.php">
+        <a class="nav-link collapsed" href="clause_audit.php">
       <i class="fas fa-file-alt"></i>
           <span>Clausule Audit</span>
         </a>
@@ -284,4 +285,9 @@ var xlwcty = {"ajax_url":"https:\/\/mdbootstrap.com\/wp-admin\/admin-ajax.php","
           </ul>
 
         </nav>
-        <!-- End of Topbar --
+        <!-- End of Topbar -->
+		
+		
+		
+		
+		
