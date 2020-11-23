@@ -26,6 +26,9 @@ $active_om = "";
 
 $regnox = $_SESSION['fnoreg']; 
 
+$form = $_GET['form'];
+
+
 ?>
 <style>
   .card-menu {
@@ -67,10 +70,13 @@ $regnox = $_SESSION['fnoreg'];
 <!-- Begin Page Content -->
 <div class="container-fluid p-1">
 
+<?php if($form == '4s'){ ?>
+
 <div class="card shadow mb-4">
             <div class="card-header py-3">
-            ALL FORM 3 PILLARS SYSTEM
             </div>
+			
+			
             <div class="card-body">
               <div class="table-responsive">
   <div id="dataTable_wrapper"> 
@@ -118,6 +124,194 @@ $regnox = $_SESSION['fnoreg'];
   
 
 </div>
+
+<?php } ?>
+
+<?php if($form == 'om'){ ?>
+
+<div class="card shadow mb-4">
+            <div class="card-header py-3">
+            </div>
+			
+			
+            <div class="card-body">
+              <div class="table-responsive">
+  <div id="dataTable_wrapper"> 
+  <table class="table table-bordered dataTable" style="font-size:12px" width="100%" border="0" cellspacing="0">
+    <thead>
+    <tr>
+    <th width="5%"><center>No</center></th>
+    <th><center>Deskripsi</center></th>
+    <th width="10%"><center>Aksi</center></th>
+    </tr>
+    </thead>
+    <tbody>
+             
+    <tr>
+   
+    <td><center>1</center></td>
+    <td><strong>FORM OM</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=4" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	 <tr>
+	 <td><center>2</center></td>
+    <td><strong>FORM OM QUALITY CONTROL</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=5" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	 
+
+    </tbody>
+    </table>
+
+  </div>
+  </div>
+  </div>  
+
+  
+
+</div>
+
+<?php } ?>
+
+<?php if($form == 'stw'){ ?>
+
+<div class="card shadow mb-4">
+            <div class="card-header py-3">
+            </div>
+			
+			
+            <div class="card-body">
+              <div class="table-responsive">
+  <div id="dataTable_wrapper"> 
+  <table class="table table-bordered dataTable" style="font-size:12px" width="100%" border="0" cellspacing="0">
+    <thead>
+    <tr>
+    <th width="5%"><center>No</center></th>
+    <th><center>Deskripsi</center></th>
+    <th width="10%"><center>Aksi</center></th>
+    </tr>
+    </thead>
+    <tbody>
+             
+    <tr>
+   
+    <td><center>1</center></td>
+    <td><strong>FORM STW</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=6" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	 <tr>
+	 <td><center>2</center></td>
+    <td><strong>FORM STW QUALITY CONTROL</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=7" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	 
+
+    </tbody>
+    </table>
+
+  </div>
+  </div>
+  </div>  
+
+  
+
+</div>
+
+<?php } ?>
+
+<?php if($form == 'pm'){ ?>
+
+<div class="card shadow mb-4">
+            <div class="card-header py-3">
+            </div>
+			
+			
+            <div class="card-body">
+              <div class="table-responsive">
+  <div id="dataTable_wrapper"> 
+  <table class="table table-bordered dataTable" style="font-size:12px" width="100%" border="0" cellspacing="0">
+    <thead>
+    <tr>
+    <th width="5%"><center>No</center></th>
+    <th><center>Deskripsi</center></th>
+    <th width="10%"><center>Aksi</center></th>
+    </tr>
+    </thead>
+    <tbody>
+             
+    <tr>
+   
+    <td><center>1</center></td>
+    <td><strong>FORM PM</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=8" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	 <tr>
+	 <td><center>2</center></td>
+    <td><strong>FORM PM ASSY</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=9" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	   <tr>
+	 <td><center>3</center></td>
+    <td><strong>FORM PM CASTING</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=10" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	  <tr>
+	 <td><center>4</center></td>
+    <td><strong>FORM PM DIE MAINTENANCE</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=11" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	  <tr>
+	 <td><center>5</center></td>
+    <td><strong>FORM PM LOGISTIC</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=12" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	  <tr>
+	 <td><center>6</center></td>
+    <td><strong>FORM PM MAINTENANCE</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=13" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	  <tr>
+	 <td><center>7</center></td>
+    <td><strong>FORM PM QUALITY CONTROL</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=14" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	  <tr>
+	 <td><center>8</center></td>
+    <td><strong>FORM PM TEST</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=15" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+	  <tr>
+	 <td><center>9</center></td>
+    <td><strong>FORM PM TOOL</strong></td>
+    <td><center><a href="edit_form_3pillars.php?id=16" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;</a></center></td>
+	 </tr>
+	 
+    </tbody>
+    </table>
+
+  </div>
+  </div>
+  </div>  
+
+  
+
+</div>
+
+<?php } ?>
+
+
 <!-- /.container-fluid -->
 
  

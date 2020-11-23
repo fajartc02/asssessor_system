@@ -59,7 +59,7 @@ $fidku = $_GET["fid"];
 
 <!-- Begin Page Content -->
 <div class="container-fluid p-1">
-  <center><legend>Add Form 4S</legend><hr /></center>
+  <center><legend>Add Form STW Quality Control</legend><hr /></center>
 
 <div class="container">
 <div class="row">
@@ -68,18 +68,18 @@ $fidku = $_GET["fid"];
 <input type="hidden" name="fid" value="">
 <table width="100%" cellpadding="10">
 <tr>
-<td width="10%" valign="top">Judul</td>
+<td width="10%" valign="top">Item</td>
 <td valign="top">:</td>
 <td>
-  <textarea class="form-control" name="fjudul"></textarea>
+  <textarea class="form-control" name="fitem"></textarea>
 </td>
 </tr>
 
 <tr>
-<td valign="top">Point</td>
+<td valign="top">Deskripsi</td>
 <td valign="top">:</td>
 <td>
-  <textarea class="form-control" name="fpoint"></textarea>
+  <textarea class="form-control" name="fdesc"></textarea>
 </td>
 </tr>
 
@@ -104,47 +104,40 @@ for($x = 0; $x <= 10; $x++ )
 </tr>
 
 <tr>
-<td valign="top">Very Bad</td>
+<td valign="top">Penjelasan</td>
 <td valign="top">:</td>
 <td>
-  <textarea class="form-control" name="fverybad"></textarea>
-</td>
-</tr>
-
-
-<tr>
-<td valign="top">Bad</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fbad"></textarea>
+  <textarea class="form-control" name="fpenj"></textarea>
 </td>
 </tr>
 
 <tr>
-<td valign="top">Normal</td>
-<td valign="top">:</td>
+<td>Level</td>
+<td>:</td>
 <td>
-  <textarea class="form-control" name="fnormal"></textarea>
+  <select name="flevel" class="js-example-basic-single form-control" required="required" >
+<option value="">-pilih-</option>
+<?php
+$searchku = "select distinct flevel from t_form_stw_qc";
+
+//datatables bang sandy 
+$queryku = mysqli_query($con, $searchku);
+while($queryku2=mysqli_fetch_array($queryku))
+{
+
+    $flevel = $queryku2["flevel"];
+   
+  
+?>
+<option name="flevel" value="<?php echo $flevel; ?>"><?php echo $flevel; ?></option>
+
+<?php
+}
+?>
+</select>
+
 </td>
-</tr>
-
-<tr>
-<td valign="top">Good</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fgood"></textarea>
-</td>
-</tr>
-
-<tr>
-<td valign="top">Verry Good</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fverygood"></textarea>
-</td>
-</tr>
-
-
+</tr>   
 
 </table>
 
@@ -168,19 +161,17 @@ for($x = 0; $x <= 10; $x++ )
 if (isset($_POST['submit']))
 {
 	
-    $fjudul = $_POST["fjudul"];
-    $fpoint = $_POST["fpoint"];
+    $fitem = $_POST["fitem"];
     $fscore = $_POST["fscore"];
-    $fverybad = $_POST["fverybad"];
-    $fbad = $_POST["fbad"];
-    $fnormal = $_POST["fnormal"];
-    $fgood = $_POST["fgood"];
-	$fverygood = $_POST["fverygood"];   
-            
+    $fdesc = $_POST["fdesc"];	
+	$fpenj = $_POST["fpenj"];
+	$flevel = $_POST["flevel"];
+   
+      
 
     
 
-    mysqli_query($con, "insert into t_form_4s (fjudul, fpoint, fscore, fverybad, fbad, fnormal, fgood, fverygood, fdate_modified) values ('$fjudul', '$fpoint', '$fscore', '$fverybad', '$fbad', '$fnormal', '$fgood', '$fverygood', now())");
+    mysqli_query($con, "insert into t_form_stw_qc (fitem, fdesc, fscore, fpenj, flevel, fdate_modified) values ('$fitem', '$fdesc', '$fscore', '$fpenj', '$flevel', now())");
 
 	
   echo "<script>window.location='edit_form_3pillars.php?id=".$fidku."'</script>";    

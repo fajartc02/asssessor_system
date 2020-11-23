@@ -59,7 +59,7 @@ $fidku = $_GET["fid"];
 
 <!-- Begin Page Content -->
 <div class="container-fluid p-1">
-  <center><legend>Add Form 4S</legend><hr /></center>
+  <center><legend>Add Form STW</legend><hr /></center>
 
 <div class="container">
 <div class="row">
@@ -68,18 +68,34 @@ $fidku = $_GET["fid"];
 <input type="hidden" name="fid" value="">
 <table width="100%" cellpadding="10">
 <tr>
-<td width="10%" valign="top">Judul</td>
+<td width="10%" valign="top">Item</td>
 <td valign="top">:</td>
 <td>
-  <textarea class="form-control" name="fjudul"></textarea>
+  <textarea class="form-control" name="fitem"></textarea>
 </td>
 </tr>
 
 <tr>
-<td valign="top">Point</td>
+<td valign="top">Silver</td>
 <td valign="top">:</td>
 <td>
-  <textarea class="form-control" name="fpoint"></textarea>
+  <textarea class="form-control" name="fsilver"></textarea>
+</td>
+</tr>
+
+<tr>
+<td valign="top">Gold</td>
+<td valign="top">:</td>
+<td>
+  <textarea class="form-control" name="fgold"></textarea>
+</td>
+</tr>
+
+<tr>
+<td valign="top">Deskripsi</td>
+<td valign="top">:</td>
+<td>
+  <textarea class="form-control" name="fdesc"></textarea>
 </td>
 </tr>
 
@@ -103,49 +119,6 @@ for($x = 0; $x <= 10; $x++ )
 </td>
 </tr>
 
-<tr>
-<td valign="top">Very Bad</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fverybad"></textarea>
-</td>
-</tr>
-
-
-<tr>
-<td valign="top">Bad</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fbad"></textarea>
-</td>
-</tr>
-
-<tr>
-<td valign="top">Normal</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fnormal"></textarea>
-</td>
-</tr>
-
-<tr>
-<td valign="top">Good</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fgood"></textarea>
-</td>
-</tr>
-
-<tr>
-<td valign="top">Verry Good</td>
-<td valign="top">:</td>
-<td>
-  <textarea class="form-control" name="fverygood"></textarea>
-</td>
-</tr>
-
-
-
 </table>
 
 </div>
@@ -168,19 +141,17 @@ for($x = 0; $x <= 10; $x++ )
 if (isset($_POST['submit']))
 {
 	
-    $fjudul = $_POST["fjudul"];
-    $fpoint = $_POST["fpoint"];
+    $fitem = $_POST["fitem"];
+    $fsilver = $_POST["fsilver"];
+	$fgold = $_POST["fgold"];
     $fscore = $_POST["fscore"];
-    $fverybad = $_POST["fverybad"];
-    $fbad = $_POST["fbad"];
-    $fnormal = $_POST["fnormal"];
-    $fgood = $_POST["fgood"];
-	$fverygood = $_POST["fverygood"];   
-            
+    $fdesc = $_POST["fdesc"];
+   
+      
 
     
 
-    mysqli_query($con, "insert into t_form_4s (fjudul, fpoint, fscore, fverybad, fbad, fnormal, fgood, fverygood, fdate_modified) values ('$fjudul', '$fpoint', '$fscore', '$fverybad', '$fbad', '$fnormal', '$fgood', '$fverygood', now())");
+    mysqli_query($con, "insert into t_form_stw (fitem, fsilver, fgold, fdesc, fscore, fdate_modified) values ('$fitem', '$fsilver', '$fgold', '$fdesc', '$fscore', now())");
 
 	
   echo "<script>window.location='edit_form_3pillars.php?id=".$fidku."'</script>";    
